@@ -6,6 +6,14 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+# Make src the absolute path
+# -----
+import os 
+import sys
+
+sys.path.insert(0, os.path.abspath(".."))
+
+
 project = 'Sphinx Tutorial'
 copyright = '2023, Arkady Wey'
 author = 'Arkady Wey'
