@@ -11,9 +11,7 @@
 import os 
 import sys
 
-sys.path.insert(0, os.path.abspath("."))
-a = os.path.abspath(".")
-print(a)
+sys.path.insert(0, os.path.abspath(".."))
 
 
 project = 'Sphinx Tutorial'
