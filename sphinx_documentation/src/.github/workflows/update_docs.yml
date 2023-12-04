@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies 
         run: | # Use pipe to run multiple lines so can also install read the docs theme
-          python -m pip install -U sphinx
+          python -m pip install sphinx
           python -m pip install sphinx-rtd-theme 
       
       - name: Make sphinx documentation 
@@ -31,7 +31,7 @@ jobs:
       
       - name: Init new repo in dist dir and commit files generated in docs/_build
         run: |
-          cd docs/_build/html/
+          cd ./docs/_build/html/
           git init 
           touch .nojekyll
           git add -A
