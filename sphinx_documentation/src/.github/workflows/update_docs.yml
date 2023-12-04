@@ -27,6 +27,7 @@ jobs:
       
       - name: Make sphinx documentation 
         run: |
+          sphinx-autodoc -o ./docs .
           cd ./docs
           make html
 
