@@ -26,7 +26,8 @@ jobs:
       
       - name: Make sphinx documentation 
         run: |
-          sphinx-apidoc -o docs .    
+          sphinx-apidoc -o ./docs .    
+          cd ./docs
           make html
       - name: Init new repo in dist dir and commit files generated in docs/_build
         run: |
