@@ -2,7 +2,7 @@
 # TODO: Customise further 
 on:
   push:
-    #branches: [main]
+    branches: [main]
 
 jobs: 
   update_docs_deployment: # name of job
