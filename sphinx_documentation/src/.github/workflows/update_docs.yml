@@ -1,31 +1,51 @@
-name: Update documentation
+# Execute on push to main 
+# TODO: Customise further 
+on:
+  push:
+    branches: [main]
 
-on: [push, pull_request, workflow_dispatch]
+jobs: 
+  update_docs_deployment: # name of job
+    runs-on: ubuntu-latest # what virtual machine job runs on
+    env: 
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    
+    steps: # Steps from the point of view of the virtual machine (defined by 'runs-on')
+      - name: Checkout
+        uses: actions/checkout@v2.3.4 # one of githubs default actions
+    
+      - name: Set up python
+        uses: actions/setup-python@v2.2.1 # another of githubs default actions
+        with: 
+          python-version: 3.9
 
-permissions:
-  contents: write
-
-jobs:
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-      - name: Install dependencies
+      - name: Install dependencies 
+        run: | # Use pipe to run multiple lines so can also install read the docs theme
+          python -m pip install -U sphinx
+          python -m pip install sphinx-rtd-theme 
+      
+      - name: Make sphinx documentation 
         run: |
-          pip install sphinx sphinx_rtd_theme myst_parser
-      - name: Execute Sphinx build
+          make -C docs clean 
+          make -C docs html
+      
+      - name: Init new repo in dist dir and commit files generated in docs/_build
         run: |
-          sphinx-apidoc -o docs . 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-        with:
-          publish_branch: main
+          cd docs/_build/html/
+          git init 
+          touch .nojekyll
+          git add -A
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
+          git commit -m "Deploy documentation"
+
+      - name: Force push to destination branch (gh-pages)
+        uses: ad-m/github-push-action@v0.5.0
+        with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _build/
-          force_orphan: true
+          branch: gh-pages
+          force: true
+          directory: ./docs/_build/html
 
-# Testing
-# sphinx-build docs _build
-#           publish_branch: gh-pages
+# NB: .nojekyll since otherwise github uses jekyll which ignores /docs/_* directories
+# directory: ./docs/_build/html explains where I am pushing from
