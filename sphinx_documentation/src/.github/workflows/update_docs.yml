@@ -32,7 +32,7 @@ jobs:
 
       - name: Run ghp-import 
         run: |
-          ghp-import -n -p -f ./docs/_build/html
+          ghp-import -n -p -f ./docs/_build/html -r origin/gh-pages
       # - name: Init new repo in dist dir and commit files generated in docs/_build
       #   run: |
       #     cd ./docs/_build/html/
